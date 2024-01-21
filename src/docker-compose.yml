@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  my-fastcgi-server:
+    build:
+      context: ./
+    networks:
+      - my-network
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  my-nginx-proxy:
+    image: nginx:latest
+    networks:
+      - my-network
+    ports:
+      - "80:8080"
+    depends_on:
+      - my-fastcgi-server
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+  my-network:
+    driver: bridge
+
